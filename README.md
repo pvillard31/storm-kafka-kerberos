@@ -70,6 +70,18 @@ KafkaBolt<String, String> kafkaBolt = new KafkaBolt<String, String>()
         .withTupleToKafkaMapper(new FieldNameBasedTupleToKafkaMapper<String, String>());
 ````
 
+### Ranger authorizations rules
+
+The Storm user will need the "describe" authorization on the Kafka topics, but the user "pvillard" will be the one needing the "consume" and "publish" authorizations.
+
+Note that the conversion from the Kerberos principal to the local username is managed by:
+> storm.principal.tolocal=org.apache.storm.security.auth.KerberosPrincipalToLocal
+
+However, if your cluster is named "hdphdf", then Ambari will create the following principal:
+> storm-hdphdf@EXAMPLE.COM
+
+It means that the username used by Storm to check Ranger authorizations will be "storm-hdphdf". Consequently, you will need to create an internal user in Ranger UI to have this user so that you can create the appropriate rules.
+
 ### Notes
 
 If you have a blank page when accessing Storm UI from Ambari, you'll need to add the following in "Custom storm-site":
